@@ -7,6 +7,10 @@ def main():
     # Parse command line arguments
     parser = argparse.ArgumentParser(description='Create a 3D scatter plot of Nim losing positions')
     parser.add_argument('filename', type=str, help='Path to the CSV file containing pile sizes')
+    parser.add_argument('--output', type=str, default='nim_plot.html',
+                       help='Output HTML filename (default: nim_plot.html)')
+    parser.add_argument('--show', action='store_true',
+                       help='Show the plot in browser (default: False)')
     args = parser.parse_args()
 
     try:
@@ -86,8 +90,13 @@ def main():
         zaxis=dict(showgrid=True, gridwidth=1, gridcolor='rgba(0,0,0,0.1)')
     )
 
-    # Show the plot
-    fig.show()
+    # Save the plot as HTML
+    fig.write_html(args.output)
+    print(f"Plot saved to {args.output}")
+
+    # Show the plot if requested
+    if args.show:
+        fig.show()
 
 if __name__ == '__main__':
     main()
