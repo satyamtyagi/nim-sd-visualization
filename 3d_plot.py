@@ -2,6 +2,7 @@ import plotly.graph_objects as go
 import pandas as pd
 import argparse
 import sys
+import plotly.io as pio
 
 def main():
     # Parse command line arguments
@@ -44,9 +45,13 @@ def main():
         z=z,
         mode='markers',
         marker=dict(
-            size=6,
-            color='blue',          # Simple blue color
-            opacity=0.8
+            size=5,
+            color='red',          # Changed to red for better visibility
+            opacity=0.8,
+            line=dict(
+                width=2,
+                color='black'
+            )
         ),
         text=hover_text,           # Add hover text
         hovertemplate=
@@ -64,17 +69,9 @@ def main():
             yaxis_title='Y',
             zaxis_title='Z',
             aspectmode='cube',
-            xaxis=dict(
-                range=[0, df.iloc[:, 0].max() + 1],
-                tickvals=list(range(0, df.iloc[:, 0].max() + 1, 5))
-            ),
-            yaxis=dict(
-                range=[0, df.iloc[:, 1].max() + 1],
-                tickvals=list(range(0, df.iloc[:, 1].max() + 1, 5))
-            ),
-            zaxis=dict(
-                range=[0, df.iloc[:, 2].max() + 1],
-                tickvals=list(range(0, df.iloc[:, 2].max() + 1, 5))
+            camera=dict(
+                eye=dict(x=1.5, y=1.5, z=1.5),
+                center=dict(x=0, y=0, z=0)
             )
         ),
         title='Nim Game Positions',
@@ -93,6 +90,11 @@ def main():
     # Save the plot as HTML
     fig.write_html(args.output)
     print(f"Plot saved to {args.output}")
+
+    # Save a static PNG image
+    image_filename = args.output.replace('.html', '.png')
+    pio.write_image(fig, image_filename, scale=2)
+    print(f"Static image saved to {image_filename}")
 
     # Show the plot if requested
     if args.show:
