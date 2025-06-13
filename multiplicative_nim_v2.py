@@ -128,11 +128,22 @@ def main():
     losing = game.find_losing_positions(filtered)
     print(f"Losing positions: {len(losing)}")
     
-    # Export results if output file is specified
+    # Export filtered positions to CSV
+    filtered_filename = f"filtered_positions_{args.max_value}_{args.prime}_{args.count}.csv"
+    df_filtered = pd.DataFrame(filtered)
+    df_filtered.to_csv(filtered_filename, index=False, header=False)
+    print(f"Filtered positions exported to {filtered_filename}")
+
+    # Export losing positions to CSV
     if args.output:
-        df = pd.DataFrame(losing)
-        df.to_csv(args.output, index=False, header=False)
-        print(f"Results exported to {args.output}")
+        df_losing = pd.DataFrame(losing)
+        df_losing.to_csv(args.output, index=False, header=False)
+        print(f"Losing positions exported to {args.output}")
+    else:
+        losing_filename = f"losing_positions_{args.max_value}_{args.prime}_{args.count}.csv"
+        df_losing = pd.DataFrame(losing)
+        df_losing.to_csv(losing_filename, index=False, header=False)
+        print(f"Losing positions exported to {losing_filename}")
 
 if __name__ == "__main__":
     main()
